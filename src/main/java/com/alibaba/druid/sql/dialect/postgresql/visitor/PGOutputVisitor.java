@@ -249,6 +249,12 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
 
 
     public boolean visit(PGSelectQueryBlock x) {
+
+        final boolean bracket = x.isBracket();
+        if (bracket) {
+            print('(');
+        }
+
         print0(ucase ? "SELECT " : "select ");
 
         if (SQLSetQuantifier.ALL == x.getDistionOption()) {
@@ -315,6 +321,10 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
         if (x.getForClause() != null) {
             println();
             x.getForClause().accept(this);
+        }
+
+        if (bracket) {
+            print(')');
         }
 
         return false;
@@ -455,7 +465,7 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
             if (onConflictDoNothing) {
                 print0(ucase ? " DO NOTHING" : " do nothing");
             } else if ((onConflictUpdateSetItems != null && onConflictUpdateSetItems.size() > 0)) {
-                print0(ucase ? " UPDATE SET " : " update set ");
+                print0(ucase ? " DO UPDATE SET " : " do update set ");
                 printAndAccept(onConflictUpdateSetItems, ", ");
             }
         }
