@@ -31,6 +31,7 @@ import com.alibaba.druid.sql.dialect.postgresql.ast.expr.PGPolygonExpr;
 import com.alibaba.druid.sql.dialect.postgresql.ast.expr.PGTypeCastExpr;
 import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGConnectToStatement;
 import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGDeleteStatement;
+import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGDoStatement;
 import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGFunctionTableSource;
 import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGInsertStatement;
 import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGSelectQueryBlock;
@@ -349,6 +350,16 @@ public class PGSchemaStatVisitor extends SchemaStatVisitor implements PGASTVisit
     @Override
     public void endVisit(PGConnectToStatement x) {
 
+    }
+
+    @Override
+    public void endVisit(PGDoStatement x) {
+
+    }
+
+    @Override
+    public boolean visit(PGDoStatement x) {
+        return true;
     }
 
     @Override
