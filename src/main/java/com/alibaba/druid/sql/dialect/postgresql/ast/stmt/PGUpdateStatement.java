@@ -50,6 +50,7 @@ public class PGUpdateStatement extends SQLUpdateStatement implements PGSQLStatem
         if (visitor.visit(this)) {
             acceptChild(visitor, with);
             acceptChild(visitor, tableSource);
+            acceptChild(visitor, from);
             acceptChild(visitor, items);
             acceptChild(visitor, where);
         }
