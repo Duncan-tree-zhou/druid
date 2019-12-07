@@ -111,7 +111,6 @@ public class PGLexer extends Lexer {
                         putChar('\0');
                         break;
                     case '\'':
-                        putChar('\'');
                         break;
                     case '"':
                         putChar('"');
@@ -138,7 +137,22 @@ public class PGLexer extends Lexer {
                         putChar(ch);
                         break;
                 }
-                scanChar();
+
+                if (ch != '\'') {
+                    scanChar();
+                }
+                else {
+                    putChar('\'');
+                    scanChar();
+                    if (ch == '\'') {
+                        initBuff(bufPos);
+                        arraycopy(mark + 1, buf, 0, bufPos);
+                        hasSpecial = true;
+                        putChar('\'');
+                        continue;
+                    }
+                }
+
             }
 
             if (ch == '\'') {

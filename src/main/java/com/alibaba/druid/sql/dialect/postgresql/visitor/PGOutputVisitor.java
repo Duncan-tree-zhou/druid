@@ -581,6 +581,17 @@ public class PGOutputVisitor extends SQLASTOutputVisitor implements PGASTVisitor
     }
 
     @Override
+    protected void printChars(String text) {
+        if (text == null) {
+            print0(ucase ? "NULL" : "null");
+        } else {
+            print('\'');
+            print0(text);
+            print('\'');
+        }
+    }
+
+    @Override
     public boolean visit(PGTypeCastExpr x) {
         SQLExpr expr = x.getExpr();
         SQLDataType dataType = x.getDataType();
