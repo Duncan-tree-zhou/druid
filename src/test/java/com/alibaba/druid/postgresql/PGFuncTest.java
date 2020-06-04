@@ -1,12 +1,10 @@
 package com.alibaba.druid.postgresql;
 
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.sql.dialect.postgresql.parser.PGSQLStatementParser;
 import junit.framework.TestCase;
-import org.junit.Assert;
 
-public class PGUnionTest extends TestCase  {
+public class PGFuncTest extends TestCase  {
 
 //  public void testUnion(){
 //    String sql = "(select id,name from t1) union (select id,name from t2)";
@@ -22,10 +20,13 @@ public class PGUnionTest extends TestCase  {
 //    System.out.println(pgstatement.toString());
 //  }
 
-  public void testUnion2(){
-    String sql = "SELECT FID, FFORMID, FCLOUDID, FAPPID FROM T_BAS_SYSPARACONSOLE WHERE FENABLED='1' AND (FCLOUDID = ? OR FCLOUDID IS NULL OR FCLOUDID = ' ' OR FCLOUDID = '') AND (FAPPID = ? OR FAPPID IS NULL OR FAPPID = ' ' OR FAPPID = ''), SQL: SELECT FID, FFORMID, FCLOUDID, FAPPID FROM T_BAS_SYSPARACONSOLE WHERE FENABLED='1' AND (FCLOUDID = ? OR FCLOUDID IS NULL OR FCLOUDID = ' ' OR FCLOUDID = '') AND (FAPPID = ? OR FAPPID IS NULL OR FAPPID = ' ' OR FAPPID = '')";
-    String targetSql = "SELECT '\\!\\''\\'':*'\n"
-        + "FROM ta";
+  public void test1(){
+    String sql = "SELECT DISTINCT A.fmaterialid \"materialid\", A.fstockid \"stockid\", A.fspid \"spid\", A.fauxpropid \"auxpropid\", A.fbatchno \"batchno\", A.fkfdate \"kfdate\", A.fkfperiod \"kfperiod\", A.fkftype \"kftype\", A.fvaliddate \"validdate\", CASE WHEN A.fvaliddate <> ' ' THEN (to_timestamp(A.fvaliddate,'YYYY-MM-DD') + '1 day') ELSE NULL END \"warndate\", CASE WHEN C.furl <> ' ' THEN C.furl ELSE B.furl END \"material_pic\", B.falarmday \"alarmday\", D.FBasedataId \"mullabel\"\n"
+        + "FROM t_inv_inventory A\n"
+        + "LEFT JOIN t_bd_materialaux C ON C.fentryid=A.fauxpropid\n"
+        + "LEFT JOIN t_bd_material B ON B.FId=A.fmaterialid\n"
+        + "LEFT JOIN t_bd_materiallabel D ON D.FId=B.FId\n"
+        + "WHERE (A.fkftype in ('1','2','3') AND B.fenable = '1');";
 
     PGSQLStatementParser pgparser=new PGSQLStatementParser(sql);
     SQLStatement pgstatement = pgparser.parseStatement();
